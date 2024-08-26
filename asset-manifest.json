@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/home/static/css/main.78c48b9b.css",
-    "main.js": "/home/static/js/main.9ddcd659.js",
-    "static/js/453.ed3810f9.chunk.js": "/home/static/js/453.ed3810f9.chunk.js",
-    "static/media/banner.png": "/home/static/media/banner.73c9c026a65d82db39d4.png",
-    "static/media/MiC_logo.png": "/home/static/media/MiC_logo.34c4b6b9ca805caaee62.png",
-    "index.html": "/home/index.html",
-    "main.78c48b9b.css.map": "/home/static/css/main.78c48b9b.css.map",
-    "main.9ddcd659.js.map": "/home/static/js/main.9ddcd659.js.map",
-    "453.ed3810f9.chunk.js.map": "/home/static/js/453.ed3810f9.chunk.js.map"
+    "main.css": "/react/home/static/css/main.78c48b9b.css",
+    "main.js": "/react/home/static/js/main.e239daff.js",
+    "static/js/453.ed3810f9.chunk.js": "/react/home/static/js/453.ed3810f9.chunk.js",
+    "static/media/banner.png": "/react/home/static/media/banner.73c9c026a65d82db39d4.png",
+    "static/media/MiC_logo.png": "/react/home/static/media/MiC_logo.34c4b6b9ca805caaee62.png",
+    "index.html": "/react/home/index.html",
+    "main.78c48b9b.css.map": "/react/home/static/css/main.78c48b9b.css.map",
+    "main.e239daff.js.map": "/react/home/static/js/main.e239daff.js.map",
+    "453.ed3810f9.chunk.js.map": "/react/home/static/js/453.ed3810f9.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.78c48b9b.css",
-    "static/js/main.9ddcd659.js"
+    "static/js/main.e239daff.js"
   ]
 }
