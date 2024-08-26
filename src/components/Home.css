@@ -1,0 +1,10 @@
+.banner {
+    width: 1000px;
+    height: 300px;
+    margin: 10px auto;
+}
+
+.banner img {
+    width: 100%;
+    height: auto;
+  }
