@@ -19,8 +19,8 @@ const UserList:React.FC = () => {
         <div className='element' key={user.id}>
           <h4>이름: {user.name}</h4>
           <div>아이디: {user.userId}</div>
-          <div>전화번호: {user.phone}</div>
           <div>이메일: {user.email}</div>
+          <div>권한: {user.authority}</div>
         </div>
       ))}
     </div>
