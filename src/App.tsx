@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { Contest, Problem, User } from './model/talbe';
 import axios from 'axios';
 import Header from './components/Header';
@@ -38,7 +38,7 @@ const App:React.FC = () => {
   }, [contests.length]);
 
   return (
-    <Router basename="/react">
+    <Router>
       <Header user={user} setUser={setUser} />
       <Routes>
         <Route path="/" element={<Home />} />

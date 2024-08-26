@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { User } from '../model/talbe';
 import axios from 'axios';
 import './List.css';
-import { User } from '../model/talbe';
 
 const UserList:React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
