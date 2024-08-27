@@ -93,6 +93,9 @@ header {
     padding-top: 0px;
     text-align: left;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .select-menu-description:not(:first-child)::before {
@@ -103,4 +106,8 @@ header {
     bottom: 0;
     width: 1px;
     background-color: #ccc;
+}
+
+.select-menu-description > div {
+    cursor: pointer;
 }

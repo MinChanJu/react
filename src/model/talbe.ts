@@ -31,3 +31,8 @@ export type Problem = {
   problemExampleOutput: string,
   createdAt: string,
 }
+
+export type CurrentContest = {
+  contestId: number,
+  contestName: string
+}

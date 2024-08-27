@@ -1,4 +1,4 @@
-.list {
+.userView {
     display: flex;
     flex-direction: column;
     margin: 100px auto;
@@ -9,7 +9,7 @@
     border-radius: 30px;
 }
 
-.element {
+.userElement {
     padding: 20px;
     font-size: 20px;
     text-align: left;
@@ -22,16 +22,16 @@
     cursor: pointer;
 }
 
-h4 {
-    margin: 0px;
+.userMenu {
+    display: flex;
+    justify-content: space-around;
 }
 
-p {
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
-a {
-    color: black;
-    text-decoration: none;
+.userButton {
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-size: 15px;
+    background-color: rgb(107, 163, 247);
+    color: rgb(237, 255, 255);
+    cursor: pointer;
 }

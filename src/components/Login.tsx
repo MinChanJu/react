@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { User } from "../model/talbe";
 import axios from "axios";
-import './Login.css'
+import './css/Login.css'
 
 interface LoginProps {
   setUser: React.Dispatch<React.SetStateAction<User>>;
@@ -153,7 +153,7 @@ const Login:React.FC<LoginProps> = ({setUser}) => {
           <h1>회원가입</h1>
           <span>{registerMessage}</span>
           <div className="input-group">
-            <input className="loginField" ref={signUpNameRef} type="text" placeholder="이름" required></input>
+            <input className="loginField" ref={signUpNameRef} type="text" placeholder="닉네임" required></input>
           </div>
           <div className="input-group">
             <input className="loginField" ref={signUpIdRef} type="text" placeholder="아이디" required></input>

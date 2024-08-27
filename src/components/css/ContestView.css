@@ -1,0 +1,41 @@
+.ContestName {
+    margin-top: 100px;
+    font-size: 40px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.ContestDescription {
+    margin: 20px auto;
+    font-size: 20px;
+    width: 600px;
+    word-break: break-all;
+    text-align: center;
+}
+
+.ContestUserId {
+    text-align: center;
+    font-size: 20px;
+    color: red;
+}
+
+.ContestUserId > span {
+    cursor: pointer;
+}
+
+.owner {
+    display: flex;
+    gap: 100px;
+    justify-content: center;
+}
+
+.addProblem,
+.editButton,
+.deleteButton {
+    padding: 6px 12px;
+    border-radius: 10px;
+    background-color: rgb(129, 210, 250);
+    color: rgb(107, 77, 68);
+    cursor: pointer;
+    font-size: 20px;
+}

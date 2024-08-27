@@ -12,6 +12,15 @@
     margin-bottom: 20px;
 }
 
+.resultMessage {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: rgb(250, 96, 96);
+    word-break: break-all;
+}
+
 .titleDes {
     margin-bottom: 30px;
     width: 100%;

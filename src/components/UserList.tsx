@@ -1,20 +1,29 @@
 import React, { useEffect, useState } from 'react';
+import { severArrayRetry } from '../model/serverRetry';
 import { User } from '../model/talbe';
-import axios from 'axios';
-import './List.css';
+import './css/List.css';
 
-const UserList:React.FC = () => {
+interface UserListProps {
+  user: User
+}
+
+const UserList:React.FC<UserListProps> = ({user}) => {
   const [users, setUsers] = useState<User[]>([]);
 
+  
   useEffect(() => {
-    axios.post('https://port-0-my-spring-app-m09c1v2t70d7f20e.sel4.cloudtype.app/api/users')
-      .then(response => setUsers(response.data as User[]))
-      .catch(error => console.error('There was a user with the axios request:', error));
-  }, []);
+    if (user.authority === 5) {
+      severArrayRetry(
+        'https://port-0-my-spring-app-m09c1v2t70d7f20e.sel4.cloudtype.app/api/users',
+        setUsers
+      )
+    }
+  }, [user.authority]);
 
   return (
     <div className='list'>
       <h1>유저 목록</h1>
+      {user.authority !== 5 && <div>권한이 없음</div>}
       {users.map((user) => (
         <div className='element' key={user.id}>
           <h4>이름: {user.name}</h4>
