@@ -57,7 +57,7 @@ const ContestView: React.FC<ContestViewProps> = ({ user, contests, problems }) =
         {contestProblems.map((problem, index) => (
           <div className='element' onClick={() => { goToProblemId(problem.id) }} key={problem.id}>
             <h4>{index + 1}. {problem.problemName}</h4>
-            <p>{problem.problemDescription}</p>
+            <p>{problem.problemDescription.slice(0, 50)} ...</p>
           </div>
         ))}
         {(user.authority === 5 || user.userId === contest[0]?.userId) &&
