@@ -91,7 +91,7 @@ const ProblemView: React.FC<ProblemViewProps> = ({ user, problems }) => {
 
       while (attempts < 5) {
         try {
-          const response = await axios.post(`http://localhost:8080/api/code`, {
+          const response = await axios.post(`https://port-0-my-spring-app-m09c1v2t70d7f20e.sel4.cloudtype.app/api/code`, {
             code: code,
             lang: lang,
             problemId: problem[0]?.id
