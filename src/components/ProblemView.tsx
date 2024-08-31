@@ -124,7 +124,7 @@ const ProblemView: React.FC<ProblemViewProps> = ({ user, problems }) => {
         navigate('/contest')
         window.location.reload()
       })
-      .catch(error => console.error('There was an error deleting the contest!', error));
+      .catch(error => console.error('There was an error deleting the problem!', error));
   }
 
   const goToProblemEdit = () => {
