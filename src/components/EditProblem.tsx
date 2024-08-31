@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useEffect, useRef, useState } from "react";
 import { Example, Problem } from "../model/talbe";
 import { useNavigate, useParams } from "react-router-dom";
@@ -35,6 +36,18 @@ const EditProblem:React.FC<EditProblemProps> = ({problems}) => {
       `https://port-0-my-spring-app-m09c1v2t70d7f20e.sel4.cloudtype.app/api/problems/examples/${id}`,
       setExamples
     )
+  }, []);
+
+  useEffect(() => {
+    if (examples.length > 0) {
+      const newRefs = examples.map((example, index) => ({
+        id: Date.now() + index,
+        inputRef: React.createRef<HTMLTextAreaElement>(),
+        outputRef: React.createRef<HTMLTextAreaElement>(),
+      }));
+      setExampleRefs(newRefs);
+      setIsRefsInitialized(true);
+    }
     if (problemNameRef.current &&
         problemDescriptionRef.current &&
         problemInputDescriptionRef.current &&
@@ -47,18 +60,6 @@ const EditProblem:React.FC<EditProblemProps> = ({problems}) => {
       problemOutputDescriptionRef.current.value = problem[0].problemOutputDescription
       problemExampleInputRef.current.value = problem[0].problemExampleInput
       problemExampleOutputRef.current.value = problem[0].problemExampleOutput
-    }
-  }, [problem,id]);
-
-  useEffect(() => {
-    if (examples.length > 0) {
-      const newRefs = examples.map((example, index) => ({
-        id: Date.now() + index,
-        inputRef: React.createRef<HTMLTextAreaElement>(),
-        outputRef: React.createRef<HTMLTextAreaElement>(),
-      }));
-      setExampleRefs(newRefs);
-      setIsRefsInitialized(true);
     }
   }, [examples]);
 
