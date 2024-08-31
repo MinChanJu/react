@@ -13,7 +13,9 @@ interface ContestViewProps {
 const ContestView: React.FC<ContestViewProps> = ({ user, contests, problems }) => {
   const { id } = useParams();
   const contest = contests.filter(contest => contest.id === Number(id));
-  const contestProblems = problems.filter(problem => problem.contestId === Number(id));
+  const contestProblems = problems
+    .filter(problem => problem.contestId === Number(id))
+    .sort((a, b) => a.id - b.id);
   const navigate = useNavigate();
 
   const goToProblemId = (problemId: number) => {
