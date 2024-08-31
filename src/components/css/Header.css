@@ -75,7 +75,7 @@ header {
     position: absolute;
     border: 1px solid gray;
     background-color: rgb(249, 246, 241);
-    top: -257px;
+    top: -500px;
     transition: all 0.5s ease;
     border: 1px solid gray;
     display: flex;

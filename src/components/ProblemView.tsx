@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { Problem, User } from "../model/talbe";
 import { useNavigate, useParams } from "react-router-dom";
 import { autoResize } from "../model/commonFunction";
+import { MathJax, MathJaxContext } from 'better-react-mathjax';
 import axios from "axios";
 import "./css/ProblemView.css";
 
@@ -19,6 +20,15 @@ const ProblemView: React.FC<ProblemViewProps> = ({ user, problems }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const navigate = useNavigate();
+
+  const mathJaxConfig = {
+    tex: {
+      inlineMath: [["$", "$"], ["\\(", "\\)"]],  // 인라인 수식 기호 설정
+      displayMath: [["$$", "$$"], ["\\[", "\\]"]],  // 블록 수식 기호 설정
+      packages: ["base", "ams"]  // 필요한 패키지들만 로드
+    },
+    loader: { load: ["[tex]/ams"] },  // AMS 패키지 로드
+  };
 
   const handleLanguageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setLang(event.target.value);
@@ -141,18 +151,22 @@ const ProblemView: React.FC<ProblemViewProps> = ({ user, problems }) => {
         </div>
       }
       <div className="resultMessage">{message}</div>
-      <div className="titleDes">
-        <div className="desName">문제 설명</div>
-        <div className="problemDes">{problem[0]?.problemDescription}</div>
-      </div>
-      <div className="titleDes">
-        <div className="desName">입력에 대한 설명</div>
-        <div className="problemDes">{problem[0]?.problemInputDescription}</div>
-      </div>
-      <div className="titleDes">
-        <div className="desName">출력에 대한 설명</div>
-        <div className="problemDes">{problem[0]?.problemOutputDescription}</div>
-      </div>
+      <MathJaxContext config={mathJaxConfig}>
+        <div  style={{ position: 'relative', zIndex: -1 }}>
+          <div className="titleDes">
+            <div className="desName">문제 설명</div>
+            <div className="problemDes"><MathJax>{problem[0]?.problemDescription}</MathJax></div>
+          </div>
+          <div className="titleDes">
+            <div className="desName">입력에 대한 설명</div>
+            <div className="problemDes"><MathJax>{problem[0]?.problemInputDescription}</MathJax></div>
+          </div>
+          <div className="titleDes">
+            <div className="desName">출력에 대한 설명</div>
+            <div className="problemDes"><MathJax>{problem[0]?.problemOutputDescription}</MathJax></div>
+          </div>
+        </div>
+      </MathJaxContext>
       <div className="doubleDes">
         <div className="titleDes">
           <div className="desName">입력 예제</div>
