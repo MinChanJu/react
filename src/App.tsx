@@ -13,6 +13,8 @@ import UserView from './components/UserView';
 import SettingView from './components/SettingView';
 import ContestMake from './components/ContestMake';
 import ProblemMake from './components/ProblemMake';
+import EditContest from './components/EditContest';
+import EditProblem from './components/EditProblem';
 import Login from './components/Login';
 import './App.css';
 
@@ -41,9 +43,11 @@ const App: React.FC = () => {
         <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login setUser={setUser} />} />
         <Route path="/contest" element={<ContestList user={user} contests={contests} setCurrentContest={setCurrentContest} />} />
+        <Route path="/contest/edit/:id" element={<EditContest user={user} contests={contests} />} />
         <Route path="/contest/make" element={<ContestMake user={user} setCurrentContest={setCurrentContest} />} />
         <Route path="/contest/:id" element={<ContestView user={user} contests={contests} problems={problems} />} />
         <Route path="/problem" element={<ProblemList user={user} problems={problems} />} />
+        <Route path="/problem/edit/:id" element={<EditProblem problems={problems} />} />
         <Route path="/problem/make" element={<ProblemMake currentContest={currentContest} user={user} />} />
         <Route path="/problem/:id" element={<ProblemView user={user} problems={problems} />} />
         <Route path="/user" element={<UserList user={user} />} />

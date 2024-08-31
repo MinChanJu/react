@@ -38,6 +38,10 @@ const ContestView: React.FC<ContestViewProps> = ({ user, contests, problems }) =
     navigate('/problem/make')
   }
 
+  const goToContestEdit = () => {
+    navigate(`/contest/edit/${id}`)
+  }
+
   return (
     <div>
       <div className="ContestName">{contest[0]?.contestName}</div>
@@ -45,7 +49,7 @@ const ContestView: React.FC<ContestViewProps> = ({ user, contests, problems }) =
       <div className="ContestUserId">주최자 : <span onClick={() => { goToUserId(contest[0]?.userId) }}>{contest[0]?.userId}</span></div>
       {(user.authority === 5 || user.userId === contest[0]?.userId) &&
         <div className="owner" style={{marginTop: '30px'}}>
-          <span className="editButton">편집</span>
+          <span className="editButton" onClick={goToContestEdit}>편집</span>
           <span className="deleteButton" onClick={() => { deleteContest(contest[0].id) }}>삭제</span>
         </div>
       }

@@ -1,8 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Problem, User } from "../model/talbe";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { autoResize } from "../model/commonFunction";
-import { severObjectRetry } from "../model/serverRetry";
 import axios from "axios";
 import "./css/ProblemView.css";
 
@@ -17,7 +16,9 @@ const ProblemView: React.FC<ProblemViewProps> = ({ user, problems }) => {
   const [lang, setLang] = useState<string>('Python');
   const [code, setCode] = useState<string>('');
   const [message, setMessage] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const navigate = useNavigate();
 
   const handleLanguageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setLang(event.target.value);
@@ -83,6 +84,8 @@ const ProblemView: React.FC<ProblemViewProps> = ({ user, problems }) => {
   };
 
   const submitCode = async () => {
+    setIsLoading(true)
+    setMessage("")
     if (code !== "") {
       let attempts = 0;
 
@@ -111,11 +114,32 @@ const ProblemView: React.FC<ProblemViewProps> = ({ user, problems }) => {
     } else {
       setMessage("코드를 작성해주세요")
     }
+    setIsLoading(false)
+  }
+
+  const deleteProblem = () => {
+    axios.delete(`https://port-0-my-spring-app-m09c1v2t70d7f20e.sel4.cloudtype.app/api/problems/${id}`)
+      .then(response => {
+        console.log('Delete successful:', response.status);
+        navigate('/contest')
+        window.location.reload()
+      })
+      .catch(error => console.error('There was an error deleting the contest!', error));
+  }
+
+  const goToProblemEdit = () => {
+    navigate(`/problem/edit/${id}`)
   }
 
   return (
     <div className="Problem">
       <div className="prblemName">{problem[0]?.problemName}</div>
+      {(user.authority === 5 || user.userId === problem[0]?.userId) &&
+        <div className="owner" style={{marginTop: '30px'}}>
+          <span className="editButton" onClick={goToProblemEdit}>편집</span>
+          <span className="deleteButton" onClick={deleteProblem}>삭제</span>
+        </div>
+      }
       <div className="resultMessage">{message}</div>
       <div className="titleDes">
         <div className="desName">문제 설명</div>
@@ -152,7 +176,9 @@ const ProblemView: React.FC<ProblemViewProps> = ({ user, problems }) => {
         </div>
       </div>
       <textarea className="codeForm" ref={textareaRef} onInput={handleInput} onKeyDown={insertKey} spellCheck={false} value={code} id="code"></textarea>
-      <div className="submitCode" onClick={submitCode}>제출</div>
+      <div className="submitCode" onClick={submitCode}>
+        {isLoading ? <div className="loading"></div> : <div>제출</div>}
+      </div>
     </div>
   )
 }

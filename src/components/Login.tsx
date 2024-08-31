@@ -10,7 +10,7 @@ interface LoginProps {
 
 const Login:React.FC<LoginProps> = ({setUser}) => {
   const navigate = useNavigate();
-  const [isMovedLeft, setIsMovedLeft] = useState(false);
+  const [isMovedLeft, setIsMovedLeft] = useState<boolean>(false);
 
   const signInRef = useRef<HTMLDivElement | null>(null);
   const signInIdRef = useRef<HTMLInputElement | null>(null);
@@ -95,7 +95,7 @@ const Login:React.FC<LoginProps> = ({setUser}) => {
     return "이미 존재하는 아이디";
   };
 
-  const registerUser = () => {
+  const registerUser = async () => {
     if (signUpNameRef.current &&
         signUpIdRef.current &&
         signUpPasswordRef.current &&
@@ -105,23 +105,36 @@ const Login:React.FC<LoginProps> = ({setUser}) => {
       const password = signUpPasswordRef.current!.value;
       const checkPassword = signUpCheckPasswordRef.current!.value;
       if (password === checkPassword) {
-        axios.post(`https://port-0-my-spring-app-m09c1v2t70d7f20e.sel4.cloudtype.app/api/users/create`,
-          {
-            name: signUpNameRef.current.value,
-            phone: signUpPhoneRef.current.value,
-            userId: signUpIdRef.current.value,
-            userPw: signUpPasswordRef.current.value,
-            email: signUpEmailRef.current.value,
-            authority: 0,
+        let attempts = 0;
+
+        while (attempts < 5) {
+          try {
+            const response = await axios.post(`https://port-0-my-spring-app-m09c1v2t70d7f20e.sel4.cloudtype.app/api/users/create`,
+            { name: signUpNameRef.current.value,
+              phone: signUpPhoneRef.current.value,
+              userId: signUpIdRef.current.value,
+              userPw: signUpPasswordRef.current.value,
+              email: signUpEmailRef.current.value,
+              authority: 0,
+            }, { timeout: 10000 });
+            if (response.data === "") {
+              setregisterMessage(isPasswordValid(password))
+            } else {
+              setregisterMessage("회원가입 성공!")
+            }
+            break;  // 성공 시 루프 탈출
+          } catch (error: any) {
+            attempts++;
+            console.error(`Attempt ${attempts} failed for register. Error: ${error.message}`);
+            if (attempts >= 5) {
+              console.error(`All ${5} attempts failed for register.`);
+              setregisterMessage("서버 에러 또는 이미 존재하는 아이디")
+              break;
+            }
+            console.log(`Retrying register in ${1000 / 1000}s...`);
+            await new Promise(resolve => setTimeout(resolve, 1000));
           }
-        ).then(response => {
-          if (response.data === "") {
-            setregisterMessage(isPasswordValid(password))
-          } else {
-            setregisterMessage("회원가입 성공!")
-          }
-        })
-        .catch(error => console.error('There was a user with the axios request:', error));
+        }
       } else {
         setregisterMessage("비밀번호가 일치하지 않습니다.")
       }
@@ -129,11 +142,14 @@ const Login:React.FC<LoginProps> = ({setUser}) => {
     }
   }
 
-  const loginUser = () => {
+  const loginUser = async () => {
     if (signInIdRef.current &&
         signInPasswordRef.current) {
-      axios.post(`https://port-0-my-spring-app-m09c1v2t70d7f20e.sel4.cloudtype.app/api/users/${signInIdRef.current.value}/${signInPasswordRef.current.value}`)
-        .then(response => {
+      let attempts = 0;
+
+      while (attempts < 5) {
+        try {
+          const response = await axios.post(`https://port-0-my-spring-app-m09c1v2t70d7f20e.sel4.cloudtype.app/api/users/${signInIdRef.current.value}/${signInPasswordRef.current.value}`, { timeout: 10000 });
           if (response.data === "") {
             setloginMessage("잘못된 아이디 또는 비밀번호")
           } else {
@@ -141,8 +157,19 @@ const Login:React.FC<LoginProps> = ({setUser}) => {
             sessionStorage.setItem('user', JSON.stringify(response.data));
             navigate('/home');
           }
-        })
-        .catch(error => console.error('There was a user with the axios request:', error));
+          break;  // 성공 시 루프 탈출
+        } catch (error: any) {
+          attempts++;
+          console.error(`Attempt ${attempts} failed for login. Error: ${error.message}`);
+          if (attempts >= 5) {
+            console.error(`All ${5} attempts failed for login.`);
+            setloginMessage("서버 에러")
+            break;
+          }
+          console.log(`Retrying login in ${1000 / 1000}s...`);
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+      }
     }
   }
   

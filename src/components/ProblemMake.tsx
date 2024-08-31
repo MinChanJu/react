@@ -10,7 +10,7 @@ interface ProblemMakeProps {
   user: User
 }
 
-interface Example {
+interface ExampleRef {
   id: number;
   inputRef: React.RefObject<HTMLTextAreaElement>;
   outputRef: React.RefObject<HTMLTextAreaElement>;
@@ -19,7 +19,7 @@ interface Example {
 const ProblemMake: React.FC<ProblemMakeProps> = ({ currentContest, user }) => {
   const navigate = useNavigate();
   const [makeMessage, setMakeMessage] = useState<string>('')
-  const [examples, setExamples] = useState<Example[]>([]);
+  const [examples, setExamples] = useState<ExampleRef[]>([]);
   const problemNameRef = useRef<HTMLInputElement | null>(null);
   const problemDescriptionRef = useRef<HTMLTextAreaElement | null>(null);
   const problemInputDescriptionRef = useRef<HTMLTextAreaElement | null>(null);
@@ -48,6 +48,10 @@ const ProblemMake: React.FC<ProblemMakeProps> = ({ currentContest, user }) => {
         outputRef: React.createRef<HTMLTextAreaElement>(),
       }
     ]);
+  };
+
+  const deleteExample = (id: number) => {
+    setExamples(prevExamples => prevExamples.filter(exampleRef => exampleRef.id !== id));
   };
 
   const handleSubmit = (cont: number) => {
@@ -81,7 +85,7 @@ const ProblemMake: React.FC<ProblemMakeProps> = ({ currentContest, user }) => {
           problemExampleOutput: problemExampleOutputRef.current.value,
           examples: exampleData
         };
-        console.log(requestData)
+
         axios.post(`https://port-0-my-spring-app-m09c1v2t70d7f20e.sel4.cloudtype.app/api/problems/create`, requestData)
           .then(response => {
             if (response.data === "") {
@@ -146,14 +150,17 @@ const ProblemMake: React.FC<ProblemMakeProps> = ({ currentContest, user }) => {
               <textarea className="makeField" ref={problemExampleOutputRef} style={{ minHeight: '100px' }} onInput={handleInput} />
             </div>
           </div>
-          {examples.map((example) => (
+          {examples.map((example, index) => (
             <div key={example.id} className="double-make-group">
               <div className="make-group">
-                <div className="makeTitle">입력 예제</div>
+                <div className="makeTitle">입력 예제 {index+1}</div>
                 <textarea className="makeField" ref={example.inputRef} style={{ minHeight: '100px' }} onInput={handleInput} />
               </div>
               <div className="make-group">
-                <div className="makeTitle">출력 예제</div>
+              <div className="makeTitle" style={{display: "flex" ,justifyContent: "space-between"}}>
+                <span>출력 예제 {index+1}</span>
+                <span style={{cursor: "pointer"}} onClick={() => {deleteExample(example.id)}}>예제 삭제</span>
+              </div>
                 <textarea className="makeField" ref={example.outputRef} style={{ minHeight: '100px' }} onInput={handleInput} />
               </div>
             </div>
