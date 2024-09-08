@@ -83,9 +83,6 @@ const Header:React.FC<HeaderProps> = ({user,setUser,problems,contests,setCurrent
         <div className="menu">
           <div className="select-menu" onClick={goToProblem}>문제</div>
           <div className="select-menu" onClick={goToContest}>대회</div>
-          <div className="select-menu">게시판</div>
-          <div className="select-menu">그룹</div>
-          <div className="select-menu">검색</div>
           <div className="description">
             <div className="select-menu-description">
               <h2>문제</h2>
@@ -99,9 +96,6 @@ const Header:React.FC<HeaderProps> = ({user,setUser,problems,contests,setCurrent
                 <div key={contest.id} onClick={() => {goToContestId(contest.id, contest.contestName)}}>{contest.contestName}</div>
               ))}
             </div>
-            <div className="select-menu-description"></div>
-            <div className="select-menu-description"></div>
-            <div className="select-menu-description"></div>
           </div>
         </div>
       </div>

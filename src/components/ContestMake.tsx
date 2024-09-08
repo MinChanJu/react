@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Contest, CurrentContest, User } from "../model/talbe";
 import axios from "axios";
 import "./css/ContestMake.css"
+import "./css/styles.css"
 
 interface ContestMakeProps {
   user: User
@@ -12,6 +13,7 @@ interface ContestMakeProps {
 const ContestMake: React.FC<ContestMakeProps> = ({ user, setCurrentContest }) => {
   const navigate = useNavigate();
   const [makeMessage, setMakeMessage] = useState<string>('')
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const userIdRef = useRef<HTMLInputElement | null>(null);
   const contestNameRef = useRef<HTMLInputElement | null>(null);
   const contestPasswordRef = useRef<HTMLInputElement | null>(null);
@@ -19,6 +21,7 @@ const ContestMake: React.FC<ContestMakeProps> = ({ user, setCurrentContest }) =>
   const contestDescriptionRef = useRef<HTMLTextAreaElement | null>(null);
 
   const handleSubmit = () => {
+    setIsLoading(true)
     if (userIdRef.current &&
         contestNameRef.current &&
         contestPasswordRef.current &&
@@ -55,6 +58,7 @@ const ContestMake: React.FC<ContestMakeProps> = ({ user, setCurrentContest }) =>
         setMakeMessage("아이디 불일치")
       }
     }
+    setIsLoading(false)
   };
   
   return (
@@ -67,7 +71,6 @@ const ContestMake: React.FC<ContestMakeProps> = ({ user, setCurrentContest }) =>
       {user.authority >= 3 &&
         <div className="makeBox">
           <h2>대회 정보 기입</h2>
-          <span>{makeMessage}</span>
           <div className="make-group">
             <div className="makeTitle">본인 아이디</div>
             <input className="makeField" ref={userIdRef} type="text"></input>
@@ -91,7 +94,10 @@ const ContestMake: React.FC<ContestMakeProps> = ({ user, setCurrentContest }) =>
             <div className="makeTitle">대회 설명</div>
             <textarea className="makeField" ref={contestDescriptionRef} style={{ height: '100px' }} id="contestDescription" />
           </div>
-          <div className="makeButton" onClick={handleSubmit}>대회 개최</div>
+          <span className="message">{makeMessage}</span>
+          <div className="makeButton" onClick={handleSubmit}>
+            {isLoading ? <div className="loading"></div> : <div>대회 개최</div>}
+          </div>
         </div>
       }
     </div>

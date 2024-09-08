@@ -4,6 +4,7 @@ import { CurrentContest, User } from "../model/talbe";
 import { autoResize } from "../model/commonFunction";
 import axios from "axios";
 import "./css/ProblemMake.css"
+import "./css/styles.css"
 
 interface ProblemMakeProps {
   currentContest: CurrentContest
@@ -20,6 +21,7 @@ const ProblemMake: React.FC<ProblemMakeProps> = ({ currentContest, user }) => {
   const navigate = useNavigate();
   const [makeMessage, setMakeMessage] = useState<string>('')
   const [examples, setExamples] = useState<ExampleRef[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const problemNameRef = useRef<HTMLInputElement | null>(null);
   const problemDescriptionRef = useRef<HTMLTextAreaElement | null>(null);
   const problemInputDescriptionRef = useRef<HTMLTextAreaElement | null>(null);
@@ -55,6 +57,7 @@ const ProblemMake: React.FC<ProblemMakeProps> = ({ currentContest, user }) => {
   };
 
   const handleSubmit = (cont: number) => {
+    setIsLoading(true)
     if (problemNameRef.current &&
       problemDescriptionRef.current &&
       problemInputDescriptionRef.current &&
@@ -109,6 +112,7 @@ const ProblemMake: React.FC<ProblemMakeProps> = ({ currentContest, user }) => {
         setMakeMessage("설명을 채워 넣어주세요")
       }
     }
+    setIsLoading(false)
   };
 
   return (
@@ -123,7 +127,6 @@ const ProblemMake: React.FC<ProblemMakeProps> = ({ currentContest, user }) => {
           <h2>문제 정보 기입</h2>
           {currentContest.contestName === "" && <div>대회에 종속되지 않음</div>}
           {currentContest.contestName !== "" && <div>Contest Id: {currentContest.contestId} Contest Name: {currentContest.contestName}</div>}
-          <span>{makeMessage}</span>
           <div className="make-group">
             <div className="makeTitle">문제 제목</div>
             <input className="makeField" ref={problemNameRef} type="text"></input>
@@ -166,9 +169,16 @@ const ProblemMake: React.FC<ProblemMakeProps> = ({ currentContest, user }) => {
             </div>
           ))}
           <div className="addExample" onClick={addExample}>예제 추가</div>
+          <span className="message">{makeMessage}</span>
           <div className="double-make-group">
-            <div className="makeButton" onClick={() => { handleSubmit(1) }}>문제 추가</div>
-            <div className="makeButton" onClick={() => { handleSubmit(0) }}>대회 완성</div>
+            {currentContest.contestName !== "" &&
+              <div className="makeButton" onClick={() => { handleSubmit(1) }}>
+                {isLoading ? <div className="loading"></div> : <div>문제 추가</div>}
+              </div>
+            }
+            <div className="makeButton" onClick={() => { handleSubmit(0) }}>
+              {isLoading ? <div className="loading"></div> : <div>문제 완성</div>}
+            </div>
           </div>
         </div>
       }

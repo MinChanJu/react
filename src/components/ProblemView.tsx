@@ -150,7 +150,6 @@ const ProblemView: React.FC<ProblemViewProps> = ({ user, problems }) => {
           <span className="deleteButton" onClick={deleteProblem}>삭제</span>
         </div>
       }
-      <div className="resultMessage">{message}</div>
       <MathJaxContext config={mathJaxConfig}>
         <div  style={{ position: 'relative', zIndex: -1 }}>
           <div className="titleDes">
@@ -177,6 +176,7 @@ const ProblemView: React.FC<ProblemViewProps> = ({ user, problems }) => {
           <div className="problemDes">{problem[0]?.problemExampleOutput}</div>
         </div>
       </div>
+      <div className="resultMessage">{message}</div>
       <div className="doubleDes">
         <div className="titleDes">
           <div className="desName">코드</div>

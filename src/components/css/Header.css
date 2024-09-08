@@ -67,6 +67,7 @@ header {
 .select-menu:hover {
     border-bottom: 2px solid rgb(93, 127, 247);
     color: rgb(93, 127, 247);
+    background-color: rgb(237, 236, 236);
 }
 
 .description {
