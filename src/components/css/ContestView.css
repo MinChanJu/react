@@ -1,16 +1,20 @@
 .ContestName {
-    margin-top: 100px;
     font-size: 40px;
     font-weight: 600;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 30px;
     text-align: center;
 }
 
 .ContestDescription {
     margin: 20px auto;
     font-size: 20px;
-    width: 600px;
+    max-width: 600px;
     word-break: break-all;
     text-align: center;
+    padding: 30px;
+    box-sizing: border-box;
 }
 
 .ContestUserId {

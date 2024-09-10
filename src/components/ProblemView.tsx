@@ -176,7 +176,8 @@ const ProblemView: React.FC<ProblemViewProps> = ({ user, problems }) => {
           <div className="problemDes">{problem[0]?.problemExampleOutput}</div>
         </div>
       </div>
-      <div className="resultMessage">{message}</div>
+      {user.id === -1 && <div className="resultMessage">코드를 제출하려면 로그인을 해주세요.</div>}
+      {user.id !== -1 && <><div className="resultMessage">{message}</div>
       <div className="doubleDes">
         <div className="titleDes">
           <div className="desName">코드</div>
@@ -192,7 +193,7 @@ const ProblemView: React.FC<ProblemViewProps> = ({ user, problems }) => {
       <textarea className="codeForm" ref={textareaRef} onInput={handleInput} onKeyDown={insertKey} spellCheck={false} value={code} id="code"></textarea>
       <div className="submitCode" onClick={submitCode}>
         {isLoading ? <div className="loading"></div> : <div>제출</div>}
-      </div>
+      </div></>}
     </div>
   )
 }

@@ -1,12 +1,18 @@
+.list-container {
+    margin: auto auto;
+    padding: 20px;
+}
+
 .list {
     display: flex;
     flex-direction: column;
     margin: 100px auto;
-    width: 50%;
+    max-width: 600px;
     padding: 20px;
     gap: 20px;
     border: 2px solid gray;
     border-radius: 30px;
+    box-sizing: border-box;
 }
 
 .element {

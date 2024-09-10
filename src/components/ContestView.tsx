@@ -50,23 +50,25 @@ const ContestView: React.FC<ContestViewProps> = ({ user, contests, problems }) =
       <div className="ContestDescription">{contest[0]?.contestDescription}</div>
       <div className="ContestUserId">주최자 : <span onClick={() => { goToUserId(contest[0]?.userId) }}>{contest[0]?.userId}</span></div>
       {(user.authority === 5 || user.userId === contest[0]?.userId) &&
-        <div className="owner" style={{marginTop: '30px'}}>
+        <div className="owner" style={{ marginTop: '30px' }}>
           <span className="editButton" onClick={goToContestEdit}>편집</span>
           <span className="deleteButton" onClick={() => { deleteContest(contest[0].id) }}>삭제</span>
         </div>
       }
-      <div className='list'>
-        {contestProblems.map((problem, index) => (
-          <div className='element' onClick={() => { goToProblemId(problem.id) }} key={problem.id}>
-            <h4>{index + 1}. {problem.problemName}</h4>
-            <p>{problem.problemDescription.slice(0, 50)} ...</p>
-          </div>
-        ))}
-        {(user.authority === 5 || user.userId === contest[0]?.userId) &&
-        <div className="owner">
-          <span className="addProblem" onClick={goToProblemMake}>문제 추가</span>
+      <div className="list-container">
+        <div className='list'>
+          {contestProblems.map((problem, index) => (
+            <div className='element' onClick={() => { goToProblemId(problem.id) }} key={problem.id}>
+              <h4>{index + 1}. {problem.problemName}</h4>
+              <p>{problem.problemDescription.slice(0, 50)} ...</p>
+            </div>
+          ))}
+          {(user.authority === 5 || user.userId === contest[0]?.userId) &&
+            <div className="owner">
+              <span className="addProblem" onClick={goToProblemMake}>문제 추가</span>
+            </div>
+          }
         </div>
-        }
       </div>
     </div>
   )
