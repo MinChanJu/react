@@ -1,10 +1,11 @@
 import React, { useRef, useState } from "react";
-import { Problem, User } from "../model/talbe";
+import { Code, Problem, User } from "../model/talbe";
 import { useNavigate, useParams } from "react-router-dom";
 import { autoResize } from "../model/commonFunction";
 import { MathJax, MathJaxContext } from 'better-react-mathjax';
 import axios from "axios";
 import "./css/ProblemView.css";
+import { serverMessageWithObjectRetry } from "../model/serverRetry";
 
 interface ProblemViewProps {
   user: User
@@ -97,30 +98,8 @@ const ProblemView: React.FC<ProblemViewProps> = ({ user, problems }) => {
     setIsLoading(true)
     setMessage("")
     if (code !== "") {
-      let attempts = 0;
-
-      while (attempts < 5) {
-        try {
-          const response = await axios.post(`https://port-0-my-spring-app-m09c1v2t70d7f20e.sel4.cloudtype.app/api/code`, {
-            code: code,
-            lang: lang,
-            problemId: problem[0]?.id
-          }, { timeout: 10000 });
-          setMessage(response.data);
-          console.log(`code load complete`);
-          break;  // 성공 시 루프 탈출
-        } catch (error: any) {
-          attempts++;
-          console.error(`Attempt ${attempts} failed for code. Error: ${error.message}`);
-          if (attempts >= 5) {
-            console.error(`All ${5} attempts failed for code.`);
-            setMessage("서버 에러")
-            break;
-          }
-          console.log(`Retrying code in ${1000 / 1000}s...`);
-          await new Promise(resolve => setTimeout(resolve, 1000));
-        }
-      }
+      let codeDTO: Code = {code: code, lang: lang, problemId: problem[0].id}
+      serverMessageWithObjectRetry<string, Code>('code', codeDTO, setMessage)
     } else {
       setMessage("코드를 작성해주세요")
     }

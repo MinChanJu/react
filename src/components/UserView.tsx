@@ -15,10 +15,7 @@ const UserView:React.FC<UserViewProps> = ({user}) => {
   
   useEffect(() => {
     if (id) {
-      severObjectRetry(
-        `https://port-0-my-spring-app-m09c1v2t70d7f20e.sel4.cloudtype.app/api/users/${id}`,
-        setCurUser
-      );
+      severObjectRetry(`api/users/${id}`, setCurUser);
     }
   }, [id]);
 

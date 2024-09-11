@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CurrentContest, User } from "../model/talbe";
+import { CurrentContest, ProblemDTO, User } from "../model/talbe";
 import { autoResize } from "../model/commonFunction";
 import axios from "axios";
 import "./css/ProblemMake.css"
@@ -76,7 +76,7 @@ const ProblemMake: React.FC<ProblemMakeProps> = ({ currentContest, user }) => {
           exampleOutput: example.outputRef.current?.value,
         }));
 
-        const requestData = {
+        const requestData: ProblemDTO = {
           contestId: currentContest.contestId,
           contestName: currentContest.contestName,
           userId: user.userId,

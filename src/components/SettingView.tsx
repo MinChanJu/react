@@ -136,10 +136,7 @@ const UserManage:React.FC<SettingViewProps> = ({user}) => {
   
   useEffect(() => {
     if (user.authority === 5) {
-      severArrayRetry(
-        'https://port-0-my-spring-app-m09c1v2t70d7f20e.sel4.cloudtype.app/api/users',
-        setUsers
-      )
+      severArrayRetry('api/users', setUsers)
     }
   }, [user.authority]);
 

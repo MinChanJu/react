@@ -44,3 +44,11 @@ export type CurrentContest = {
   contestId: number,
   contestName: string
 }
+
+export type Code = {
+  code: string,
+  lang: string,
+  problemId: number
+}
+
+export type ProblemDTO = {}

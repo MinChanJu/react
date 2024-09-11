@@ -33,7 +33,7 @@ const EditProblem:React.FC<EditProblemProps> = ({problems}) => {
 
   useEffect(() => {
     severArrayRetry(
-      `https://port-0-my-spring-app-m09c1v2t70d7f20e.sel4.cloudtype.app/api/problems/examples/${id}`,
+      `api/problems/examples/${id}`,
       setExamples
     )
   }, []);

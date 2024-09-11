@@ -28,11 +28,7 @@ const App: React.FC = () => {
   const [contests, setContests] = useState<Contest[]>([]);
 
   useEffect(() => {
-    severComposeArrayRetry<Problem,Contest>(
-      'https://port-0-my-spring-app-m09c1v2t70d7f20e.sel4.cloudtype.app/api/data',
-      setProblems,
-      setContests
-    );
+    severComposeArrayRetry<Problem,Contest>('api/data', setProblems, setContests);
   }, []);
 
   return (
