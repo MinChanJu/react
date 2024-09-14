@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Contest, User } from "../model/talbe";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { url } from "../model/serverRetry";
 
 interface EditContestProps {
   user: User
@@ -39,12 +40,7 @@ const EditContest: React.FC<EditContestProps> = ({ user, contests }) => {
       contestPasswordRef.current &&
       contestCheckPasswordRef.current &&
       contestDescriptionRef.current) {
-      console.log("user id : "+userIdRef.current.value)
-      console.log("contest name : "+contestNameRef.current.value)
-      console.log("contest password : "+contestPasswordRef.current.value)
-      console.log("contest check password : "+contestCheckPasswordRef.current.value)
-      console.log("contest description : "+contestDescriptionRef.current.value)
-      setEditMessage("제출 완료")
+      setEditMessage("")
       if (userIdRef.current.value === user.userId && user.userId !== "") {
         if (contestPasswordRef.current.value === contestCheckPasswordRef.current.value) {
           if (contestNameRef.current.value !== '') {
@@ -52,7 +48,7 @@ const EditContest: React.FC<EditContestProps> = ({ user, contests }) => {
 
             while (attempts < 5) {
               try {
-                const response = await axios.put(`https://port-0-my-spring-app-m09c1v2t70d7f20e.sel4.cloudtype.app/api/contests/${id}`,
+                const response = await axios.put(url + `contests/${id}`,
                   { userId: userIdRef.current.value,
                     contestName: contestNameRef.current.value,
                     contestDescription: contestDescriptionRef.current.value,
@@ -71,7 +67,7 @@ const EditContest: React.FC<EditContestProps> = ({ user, contests }) => {
                 console.error(`Attempt ${attempts} failed for contest edit. Error: ${error.message}`);
                 if (attempts >= 5) {
                   console.error(`All ${5} attempts failed for contest edit.`);
-                  setEditMessage("서버 에러")
+                  setEditMessage("이미 존재하는 대회 이름 또는 서버 에러")
                   break;
                 }
                 console.log(`Retrying contest edit in ${1000 / 1000}s...`);

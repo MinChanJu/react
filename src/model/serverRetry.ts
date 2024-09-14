@@ -1,8 +1,8 @@
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { NavigateFunction } from "react-router-dom";
 
-// let url = "https://port-0-my-spring-app-m09c1v2t70d7f20e.sel4.cloudtype.app/api/";
-let url = "http://localhost:8080/api/";
+export const url = "https://port-0-my-spring-app-m09c1v2t70d7f20e.sel4.cloudtype.app/api/";
+// export const url = "http://localhost:8080/api/";
 
 export async function severComposeArrayRetry<T,D>(api: string, setData1: (data: T[]) => void, setData2: (data: D[]) => void, maxRetries: number = 5, delay: number = 1000): Promise<void> {
     let attempts = 0;
@@ -94,19 +94,19 @@ export async function serverMessageWithObjectRetry<T,D>(api: string, send: D, se
     }
 }
 
-export async function serverNoReturnRetry<T>(api: string, send: T, method: string, move: string, maxRetries: number = 5, delay: number = 1000): Promise<void> {
+export async function serverNoReturnRetry<T>(api: string, send: T, method: string, move: string, navigate: NavigateFunction, maxRetries: number = 5, delay: number = 1000): Promise<void> {
     let attempts = 0;
-    const navigate = useNavigate();
 
     while (attempts < maxRetries) {
         try {
             let response = ""
             if (method === "put") {response = await axios.put(url + api, send, { timeout: 10000 });}
-            else if (method === "delete") {response = await axios.put(url + api, send, { timeout: 10000 });}
+            else if (method === "delete") {response = await axios.delete(url + api, { timeout: 10000 });}
             else {console.log("잘못된 인수"); break}
 
-            if (response !== "")
-            console.log(`${api} load complete`);
+            console.log(`${api} ${response} load complete`);
+            navigate(move)
+            window.location.reload()
             break;  // 성공 시 루프 탈출
         } catch (error: any) {
             attempts++;

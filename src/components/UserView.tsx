@@ -15,7 +15,7 @@ const UserView:React.FC<UserViewProps> = ({user}) => {
   
   useEffect(() => {
     if (id) {
-      severObjectRetry(`api/users/${id}`, setCurUser);
+      severObjectRetry(`users/${id}`, setCurUser);
     }
   }, [id]);
 

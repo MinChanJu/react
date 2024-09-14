@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Contest, CurrentContest, User } from "../model/talbe";
+import { url } from "../model/serverRetry";
 import axios from "axios";
 import "./css/ContestMake.css"
 import "./css/styles.css"
@@ -20,34 +21,48 @@ const ContestMake: React.FC<ContestMakeProps> = ({ user, setCurrentContest }) =>
   const contestCheckPasswordRef = useRef<HTMLInputElement | null>(null);
   const contestDescriptionRef = useRef<HTMLTextAreaElement | null>(null);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setIsLoading(true)
     if (userIdRef.current &&
-        contestNameRef.current &&
-        contestPasswordRef.current &&
-        contestCheckPasswordRef.current &&
-        contestDescriptionRef.current) {
+      contestNameRef.current &&
+      contestPasswordRef.current &&
+      contestCheckPasswordRef.current &&
+      contestDescriptionRef.current) {
       if (userIdRef.current.value === user.userId && user.userId !== "") {
         if (contestPasswordRef.current.value === contestCheckPasswordRef.current.value) {
           if (contestNameRef.current.value !== '') {
-            axios.post(`https://port-0-my-spring-app-m09c1v2t70d7f20e.sel4.cloudtype.app/api/contests/create`,
-              {
-                userId: userIdRef.current.value,
-                contestName: contestNameRef.current.value,
-                contestDescription: contestDescriptionRef.current.value,
-                contestPw: contestPasswordRef.current.value
+            let attempts = 0;
+
+            while (attempts < 5) {
+              try {
+                let response = await axios.post(url + `contests/create`, {
+                  userId: userIdRef.current.value,
+                  contestName: contestNameRef.current.value,
+                  contestDescription: contestDescriptionRef.current.value,
+                  contestPw: contestPasswordRef.current.value
+                }, { timeout: 10000 });
+
+                if (response.data === "") {
+                  setMakeMessage("서버 오류")
+                } else {
+                  const contest = response.data as Contest
+                  setCurrentContest({ contestId: contest.id, contestName: contest.contestName })
+                  navigate('/problem/make')
+                  setMakeMessage("대회 개최 성공!")
+                }
+                break;  // 성공 시 루프 탈출
+              } catch (error: any) {
+                attempts++;
+                console.error(`Attempt ${attempts} failed for contests/create. Error: ${error.message}`);
+                if (attempts >= 5) {
+                  console.error(`All ${5} attempts failed for contests/create.`);
+                  setMakeMessage("이미 존재하는 대회 이름 또는 서버 에러")
+                  break;
+                }
+                console.log(`Retrying $contests/create in 1s...`);
+                await new Promise(resolve => setTimeout(resolve, 1000));
               }
-            ).then(response => {
-              if (response.data === "") {
-                setMakeMessage("서버 오류")
-              } else {
-                const contest = response.data as Contest
-                setCurrentContest({contestId: contest.id, contestName: contest.contestName})
-                navigate('/problem/make')
-                setMakeMessage("대회 개최 성공!")
-              }
-            })
-            .catch(error => setMakeMessage("이미 존재하는 대회 이름 또는 서버 에러"));
+            }
           } else {
             setMakeMessage("이름 작성 필요")
           }
@@ -60,7 +75,7 @@ const ContestMake: React.FC<ContestMakeProps> = ({ user, setCurrentContest }) =>
     }
     setIsLoading(false)
   };
-  
+
   return (
     <div className="makeContainer">
       {user.authority < 3 &&

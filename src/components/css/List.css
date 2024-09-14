@@ -1,12 +1,12 @@
 .list-container {
-    margin: auto auto;
+    margin: 0px auto;
     padding: 20px;
 }
 
 .list {
     display: flex;
     flex-direction: column;
-    margin: 100px auto;
+    margin: 50px auto;
     max-width: 600px;
     padding: 20px;
     gap: 20px;

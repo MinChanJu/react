@@ -19,7 +19,7 @@ header {
 }
 
 .logoTitle {
-    font-size: 25px;
+    font-size: 23px;
     align-content: end;
     margin-bottom: 10px;
 }
@@ -76,7 +76,7 @@ header {
     position: absolute;
     border: 1px solid gray;
     background-color: rgb(249, 246, 241);
-    top: -500px;
+    top: -1000px;
     transition: all 0.5s ease;
     border: 1px solid gray;
     display: flex;

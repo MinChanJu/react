@@ -4,6 +4,7 @@ import { User } from "../model/talbe";
 import axios from "axios";
 import './css/Login.css'
 import './css/styles.css'
+import { url } from "../model/serverRetry";
 
 interface LoginProps {
   setUser: React.Dispatch<React.SetStateAction<User>>;
@@ -118,7 +119,7 @@ const Login: React.FC<LoginProps> = ({ setUser }) => {
 
           while (attempts < 5) {
             try {
-              const response = await axios.post(`https://port-0-my-spring-app-m09c1v2t70d7f20e.sel4.cloudtype.app/api/users/create`,
+              const response = await axios.post(url + `users/create`,
                 {
                   name: signUpNameRef.current.value,
                   phone: signUpPhoneRef.current.value,
@@ -165,7 +166,7 @@ const Login: React.FC<LoginProps> = ({ setUser }) => {
 
         while (attempts < 5) {
           try {
-            const response = await axios.post(`https://port-0-my-spring-app-m09c1v2t70d7f20e.sel4.cloudtype.app/api/users/${signInIdRef.current.value}/${signInPasswordRef.current.value}`, { timeout: 10000 });
+            const response = await axios.post(url + `users/${signInIdRef.current.value}/${signInPasswordRef.current.value}`, { timeout: 10000 });
             if (response.data === "") {
               setloginMessage("잘못된 아이디 또는 비밀번호")
             } else {

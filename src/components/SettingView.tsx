@@ -136,7 +136,7 @@ const UserManage:React.FC<SettingViewProps> = ({user}) => {
   
   useEffect(() => {
     if (user.authority === 5) {
-      severArrayRetry('api/users', setUsers)
+      severArrayRetry('users', setUsers)
     }
   }, [user.authority]);
 

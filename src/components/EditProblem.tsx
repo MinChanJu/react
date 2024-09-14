@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Example, Problem } from "../model/talbe";
 import { useNavigate, useParams } from "react-router-dom";
-import { severArrayRetry } from "../model/serverRetry";
+import { url, severArrayRetry } from "../model/serverRetry";
 import { autoResize } from "../model/commonFunction";
 import axios from "axios";
 
@@ -16,7 +16,7 @@ interface ExampleRef {
   outputRef: React.RefObject<HTMLTextAreaElement>;
 }
 
-const EditProblem:React.FC<EditProblemProps> = ({problems}) => {
+const EditProblem: React.FC<EditProblemProps> = ({ problems }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const problem = problems.filter(problem => problem.id === Number(id));
@@ -49,11 +49,11 @@ const EditProblem:React.FC<EditProblemProps> = ({problems}) => {
       setIsRefsInitialized(true);
     }
     if (problemNameRef.current &&
-        problemDescriptionRef.current &&
-        problemInputDescriptionRef.current &&
-        problemOutputDescriptionRef.current &&
-        problemExampleInputRef.current &&
-        problemExampleOutputRef.current) {
+      problemDescriptionRef.current &&
+      problemInputDescriptionRef.current &&
+      problemOutputDescriptionRef.current &&
+      problemExampleInputRef.current &&
+      problemExampleOutputRef.current) {
       problemNameRef.current.value = problem[0].problemName
       problemDescriptionRef.current.value = problem[0].problemDescription
       problemInputDescriptionRef.current.value = problem[0].problemInputDescription
@@ -95,19 +95,19 @@ const EditProblem:React.FC<EditProblemProps> = ({problems}) => {
     setExampleRefs(prevExamples => prevExamples.filter(exampleRef => exampleRef.id !== id));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (problemNameRef.current &&
-        problemDescriptionRef.current &&
-        problemInputDescriptionRef.current &&
-        problemOutputDescriptionRef.current &&
-        problemExampleInputRef.current &&
-        problemExampleOutputRef.current) {
+      problemDescriptionRef.current &&
+      problemInputDescriptionRef.current &&
+      problemOutputDescriptionRef.current &&
+      problemExampleInputRef.current &&
+      problemExampleOutputRef.current) {
       setEditMessage("")
 
       if (problemNameRef.current.value !== "" &&
-          problemDescriptionRef.current.value !== "" &&
-          problemInputDescriptionRef.current.value !== "" &&
-          problemOutputDescriptionRef.current.value !== "") {
+        problemDescriptionRef.current.value !== "" &&
+        problemInputDescriptionRef.current.value !== "" &&
+        problemOutputDescriptionRef.current.value !== "") {
 
         const exampleData = exampleRefs.map(exampleRef => ({
           exampleInput: exampleRef.inputRef.current?.value,
@@ -126,17 +126,30 @@ const EditProblem:React.FC<EditProblemProps> = ({problems}) => {
           problemExampleOutput: problemExampleOutputRef.current.value,
           examples: exampleData
         };
+        let attempts = 0;
 
-        axios.put(`https://port-0-my-spring-app-m09c1v2t70d7f20e.sel4.cloudtype.app/api/problems/${id}`, requestData)
-          .then(response => {
+        while (attempts < 5) {
+          try {
+            const response = await axios.put(url + `problems/${id}`, requestData, { timeout: 10000 });
             if (response.data === "") {
               setEditMessage("서버 오류")
             } else {
               navigate(`/problem/${id}`)
               window.location.reload()
             }
-          })
-          .catch(error => setEditMessage("이미 존재하는 문제 이름 또는 서버 에러"));
+            break;  // 성공 시 루프 탈출
+          } catch (error: any) {
+            attempts++;
+            console.error(`Attempt ${attempts} failed for contest edit. Error: ${error.message}`);
+            if (attempts >= 5) {
+              console.error(`All ${5} attempts failed for contest edit.`);
+              setEditMessage("이미 존재하는 문제 이름 또는 서버 에러")
+              break;
+            }
+            console.log(`Retrying contest edit in ${1000 / 1000}s...`);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+          }
+        }
       } else {
         setEditMessage("설명을 채워 넣어주세요")
       }
@@ -179,13 +192,13 @@ const EditProblem:React.FC<EditProblemProps> = ({problems}) => {
         {exampleRefs.map((exampleRef, index) => (
           <div key={exampleRef.id} className="double-make-group">
             <div className="make-group">
-              <div className="makeTitle">입력 예제 {index+1}</div>
+              <div className="makeTitle">입력 예제 {index + 1}</div>
               <textarea className="makeField" ref={exampleRef.inputRef} style={{ minHeight: '100px' }} onInput={handleInput} />
             </div>
             <div className="make-group">
-              <div className="makeTitle" style={{display: "flex" ,justifyContent: "space-between"}}>
-                <span>출력 예제 {index+1}</span>
-                <span style={{cursor: "pointer"}} onClick={() => {deleteExample(exampleRef.id)}}>예제 삭제</span>
+              <div className="makeTitle" style={{ display: "flex", justifyContent: "space-between" }}>
+                <span>출력 예제 {index + 1}</span>
+                <span style={{ cursor: "pointer" }} onClick={() => { deleteExample(exampleRef.id) }}>예제 삭제</span>
               </div>
               <textarea className="makeField" ref={exampleRef.outputRef} style={{ minHeight: '100px' }} onInput={handleInput} />
             </div>

@@ -5,6 +5,7 @@ import { autoResize } from "../model/commonFunction";
 import axios from "axios";
 import "./css/ProblemMake.css"
 import "./css/styles.css"
+import { url } from "../model/serverRetry";
 
 interface ProblemMakeProps {
   currentContest: CurrentContest
@@ -56,7 +57,7 @@ const ProblemMake: React.FC<ProblemMakeProps> = ({ currentContest, user }) => {
     setExamples(prevExamples => prevExamples.filter(exampleRef => exampleRef.id !== id));
   };
 
-  const handleSubmit = (cont: number) => {
+  const handleSubmit = async (cont: number) => {
     setIsLoading(true)
     if (problemNameRef.current &&
       problemDescriptionRef.current &&
@@ -89,8 +90,11 @@ const ProblemMake: React.FC<ProblemMakeProps> = ({ currentContest, user }) => {
           examples: exampleData
         };
 
-        axios.post(`https://port-0-my-spring-app-m09c1v2t70d7f20e.sel4.cloudtype.app/api/problems/create`, requestData)
-          .then(response => {
+        let attempts = 0;
+
+        while (attempts < 5) {
+          try {
+            const response = await axios.post(url + `problems/create`, requestData, { timeout: 10000 });
             if (response.data === "") {
               setMakeMessage("서버 오류")
             } else {
@@ -106,8 +110,19 @@ const ProblemMake: React.FC<ProblemMakeProps> = ({ currentContest, user }) => {
                 window.location.reload()
               }
             }
-          })
-          .catch(error => setMakeMessage("이미 존재하는 문제 이름 또는 서버 에러"));
+            break;  // 성공 시 루프 탈출
+          } catch (error: any) {
+            attempts++;
+            console.error(`Attempt ${attempts} failed for contest edit. Error: ${error.message}`);
+            if (attempts >= 5) {
+              console.error(`All ${5} attempts failed for contest edit.`);
+              setMakeMessage("이미 존재하는 문제 이름 또는 서버 에러")
+              break;
+            }
+            console.log(`Retrying contest edit in ${1000 / 1000}s...`);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+          }
+        }
       } else {
         setMakeMessage("설명을 채워 넣어주세요")
       }
@@ -156,14 +171,14 @@ const ProblemMake: React.FC<ProblemMakeProps> = ({ currentContest, user }) => {
           {examples.map((example, index) => (
             <div key={example.id} className="double-make-group">
               <div className="make-group">
-                <div className="makeTitle">입력 예제 {index+1}</div>
+                <div className="makeTitle">입력 예제 {index + 1}</div>
                 <textarea className="makeField" ref={example.inputRef} style={{ minHeight: '100px' }} onInput={handleInput} />
               </div>
               <div className="make-group">
-              <div className="makeTitle" style={{display: "flex" ,justifyContent: "space-between"}}>
-                <span>출력 예제 {index+1}</span>
-                <span style={{cursor: "pointer"}} onClick={() => {deleteExample(example.id)}}>예제 삭제</span>
-              </div>
+                <div className="makeTitle" style={{ display: "flex", justifyContent: "space-between" }}>
+                  <span>출력 예제 {index + 1}</span>
+                  <span style={{ cursor: "pointer" }} onClick={() => { deleteExample(example.id) }}>예제 삭제</span>
+                </div>
                 <textarea className="makeField" ref={example.outputRef} style={{ minHeight: '100px' }} onInput={handleInput} />
               </div>
             </div>

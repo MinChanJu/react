@@ -28,7 +28,7 @@ const App: React.FC = () => {
   const [contests, setContests] = useState<Contest[]>([]);
 
   useEffect(() => {
-    severComposeArrayRetry<Problem,Contest>('api/data', setProblems, setContests);
+    severComposeArrayRetry<Problem,Contest>('data', setProblems, setContests);
   }, []);
 
   return (

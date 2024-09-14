@@ -3,9 +3,8 @@ import { Code, Problem, User } from "../model/talbe";
 import { useNavigate, useParams } from "react-router-dom";
 import { autoResize } from "../model/commonFunction";
 import { MathJax, MathJaxContext } from 'better-react-mathjax';
-import axios from "axios";
 import "./css/ProblemView.css";
-import { serverMessageWithObjectRetry } from "../model/serverRetry";
+import { serverMessageWithObjectRetry, serverNoReturnRetry } from "../model/serverRetry";
 
 interface ProblemViewProps {
   user: User
@@ -107,13 +106,7 @@ const ProblemView: React.FC<ProblemViewProps> = ({ user, problems }) => {
   }
 
   const deleteProblem = () => {
-    axios.delete(`https://port-0-my-spring-app-m09c1v2t70d7f20e.sel4.cloudtype.app/api/problems/${id}`)
-      .then(response => {
-        console.log('Delete successful:', response.status);
-        navigate('/contest')
-        window.location.reload()
-      })
-      .catch(error => console.error('There was an error deleting the problem!', error));
+    serverNoReturnRetry(`problems/${id}`, null, "delete", "/contest", navigate)
   }
 
   const goToProblemEdit = () => {

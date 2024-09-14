@@ -2,7 +2,8 @@ import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Contest, Problem, User } from "../model/talbe";
 import './css/ContestView.css';
-import axios from "axios";
+import { serverNoReturnRetry } from "../model/serverRetry";
+import { MathJaxContext } from "better-react-mathjax";
 
 interface ContestViewProps {
   user: User
@@ -17,6 +18,14 @@ const ContestView: React.FC<ContestViewProps> = ({ user, contests, problems }) =
     .filter(problem => problem.contestId === Number(id))
     .sort((a, b) => a.id - b.id);
   const navigate = useNavigate();
+  const mathJaxConfig = {
+    tex: {
+      inlineMath: [["$", "$"], ["\\(", "\\)"]],  // 인라인 수식 기호 설정
+      displayMath: [["$$", "$$"], ["\\[", "\\]"]],  // 블록 수식 기호 설정
+      packages: ["base", "ams"]  // 필요한 패키지들만 로드
+    },
+    loader: { load: ["[tex]/ams"] },  // AMS 패키지 로드
+  };
 
   const goToProblemId = (problemId: number) => {
     navigate(`/problem/${problemId}`);
@@ -27,13 +36,7 @@ const ContestView: React.FC<ContestViewProps> = ({ user, contests, problems }) =
   };
 
   const deleteContest = (contestId: number) => {
-    axios.delete(`https://port-0-my-spring-app-m09c1v2t70d7f20e.sel4.cloudtype.app/api/contests/${contestId}`)
-      .then(response => {
-        console.log('Delete successful:', response.status);
-        navigate('/contest')
-        window.location.reload()
-      })
-      .catch(error => console.error('There was an error deleting the contest!', error));
+    serverNoReturnRetry(`contests/${contestId}`, null, "delete", "/contest", navigate)
   }
 
   const goToProblemMake = () => {
@@ -57,12 +60,15 @@ const ContestView: React.FC<ContestViewProps> = ({ user, contests, problems }) =
       }
       <div className="list-container">
         <div className='list'>
-          {contestProblems.map((problem, index) => (
-            <div className='element' onClick={() => { goToProblemId(problem.id) }} key={problem.id}>
-              <h4>{index + 1}. {problem.problemName}</h4>
-              <p>{problem.problemDescription.slice(0, 50)} ...</p>
-            </div>
-          ))}
+          <MathJaxContext config={mathJaxConfig}>
+            {contestProblems.map((problem, index) => (
+              <div className='element' onClick={() => { goToProblemId(problem.id) }} key={problem.id}>
+                <h4>{index + 1}. {problem.problemName}</h4>
+                {problem.problemDescription.length > 50 && <p>{problem.problemDescription.slice(0, 50)} ...</p>}
+                {problem.problemDescription.length <= 50 && <p>{problem.problemDescription}</p>}
+              </div>
+            ))}
+          </MathJaxContext>
           {(user.authority === 5 || user.userId === contest[0]?.userId) &&
             <div className="owner">
               <span className="addProblem" onClick={goToProblemMake}>문제 추가</span>
