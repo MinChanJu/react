@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/react/static/css/main.1e6462ea.css",
+    "main.css": "/react/static/css/main.bd71c143.css",
     "main.js": "/react/static/js/main.f5557f59.js",
     "static/js/453.ed3810f9.chunk.js": "/react/static/js/453.ed3810f9.chunk.js",
     "static/media/banner.png": "/react/static/media/banner.73c9c026a65d82db39d4.png",
     "static/media/MiC_logo.png": "/react/static/media/MiC_logo.34c4b6b9ca805caaee62.png",
     "index.html": "/react/index.html",
-    "main.1e6462ea.css.map": "/react/static/css/main.1e6462ea.css.map",
+    "main.bd71c143.css.map": "/react/static/css/main.bd71c143.css.map",
     "main.f5557f59.js.map": "/react/static/js/main.f5557f59.js.map",
     "453.ed3810f9.chunk.js.map": "/react/static/js/453.ed3810f9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.1e6462ea.css",
+    "static/css/main.bd71c143.css",
     "static/js/main.f5557f59.js"
   ]
 }
