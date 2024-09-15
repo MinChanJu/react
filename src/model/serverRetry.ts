@@ -72,8 +72,9 @@ export async function severObjectRetry<T>(api: string, setData: (data: T) => voi
     }
 }
 
-export async function serverMessageWithObjectRetry<T,D>(api: string, send: D, setData: (data: T) => void, maxRetries: number = 5, delay: number = 1000): Promise<void> {
+export async function serverMessageWithObjectRetry<T,D>(api: string, send: D, setData: (data: T) => void, setLoading: (data: boolean) => void, maxRetries: number = 5, delay: number = 1000): Promise<void> {
     let attempts = 0;
+    setLoading(true)
 
     while (attempts < maxRetries) {
         try {
@@ -92,6 +93,7 @@ export async function serverMessageWithObjectRetry<T,D>(api: string, send: D, se
             await new Promise(resolve => setTimeout(resolve, delay));
         }
     }
+    setLoading(false)
 }
 
 export async function serverNoReturnRetry<T>(api: string, send: T, method: string, move: string, navigate: NavigateFunction, maxRetries: number = 5, delay: number = 1000): Promise<void> {

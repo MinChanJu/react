@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { User } from "../model/talbe";
 import { severObjectRetry } from '../model/serverRetry';
 import "./css/UserView.css"
 
-interface UserViewProps {
-  user: User;
-}
-
-const UserView:React.FC<UserViewProps> = ({user}) => {
+const UserView:React.FC = () => {
   const { id } = useParams<{id: string}>();
   const [curUser, setCurUser] = useState<User>();
-  const navigate = useNavigate();
+  const [year, setYear] = useState<string>();
+  const [month, setMonth] = useState<string>();
+  const [day, setDay] = useState<string>();
   
   useEffect(() => {
     if (id) {
@@ -20,34 +18,19 @@ const UserView:React.FC<UserViewProps> = ({user}) => {
   }, [id]);
 
   useEffect(() => {
-    if (user.id === curUser?.id) {
-      setCurUser(user);
-    }
-  }, [user, curUser]);
-
-  const goToSetting = () => {
-    navigate('/setting');
-  };
-
-  const goToUser = () => {
-    navigate('/user');
-  };
+    setYear(curUser?.createdAt.substring(0,4))
+    setMonth(curUser?.createdAt.substring(5,7))
+    setDay(curUser?.createdAt.substring(8,10))
+  }, [curUser])
 
   return (
     <div className="userView">
       <h1>정보</h1>
       <div className="userElement">
         <h4>{curUser?.name}</h4>
-        <div>{curUser?.userId}</div>
-        <div>{curUser?.userPw}</div>
-        <div>{curUser?.phone}</div>
-        <div>{curUser?.email}</div>
-        <div>{curUser?.authority}</div>
-        <div>{curUser?.createdAt}</div>
-      </div>
-      <div className="userMenu">
-        {user.id === curUser?.id && <div className="userButton" onClick={goToSetting}>설정</div>}
-        {user.id === curUser?.id && user.authority === 5 && <div className="userButton" onClick={goToUser}>회원관리</div>}
+        <div>아이디: {curUser?.userId}</div>
+        <div>이메일: {curUser?.email}</div>
+        <div>가입 날짜: {year}년 {month}월 {day}일</div>
       </div>
     </div>
   )

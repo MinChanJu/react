@@ -3,8 +3,9 @@ import { Code, Problem, User } from "../model/talbe";
 import { useNavigate, useParams } from "react-router-dom";
 import { autoResize } from "../model/commonFunction";
 import { MathJax, MathJaxContext } from 'better-react-mathjax';
-import "./css/ProblemView.css";
 import { serverMessageWithObjectRetry, serverNoReturnRetry } from "../model/serverRetry";
+import "./css/ProblemView.css";
+import "./css/styles.css";
 
 interface ProblemViewProps {
   user: User
@@ -94,15 +95,13 @@ const ProblemView: React.FC<ProblemViewProps> = ({ user, problems }) => {
   };
 
   const submitCode = async () => {
-    setIsLoading(true)
     setMessage("")
     if (code !== "") {
       let codeDTO: Code = {code: code, lang: lang, problemId: problem[0].id}
-      serverMessageWithObjectRetry<string, Code>('code', codeDTO, setMessage)
+      serverMessageWithObjectRetry<string, Code>('code', codeDTO, setMessage, setIsLoading)
     } else {
       setMessage("코드를 작성해주세요")
     }
-    setIsLoading(false)
   }
 
   const deleteProblem = () => {

@@ -6,7 +6,6 @@ import Header from './components/Header';
 import Home from './components/Home';
 import ContestList from './components/ContestList';
 import ProblemList from './components/ProblemList';
-import UserList from './components/UserList';
 import ContestView from './components/ContestView';
 import ProblemView from './components/ProblemView';
 import UserView from './components/UserView';
@@ -46,9 +45,8 @@ const App: React.FC = () => {
         <Route path="/problem/edit/:id" element={<EditProblem problems={problems} />} />
         <Route path="/problem/make" element={<ProblemMake currentContest={currentContest} user={user} />} />
         <Route path="/problem/:id" element={<ProblemView user={user} problems={problems} />} />
-        <Route path="/user" element={<UserList user={user} />} />
-        <Route path="/user/:id" element={<UserView user={user} />} />
-        <Route path="/setting" element={<SettingView user={user} />} />
+        <Route path="/user/:id" element={<UserView />} />
+        <Route path="/setting" element={<SettingView user={user} contests={contests} problems={problems} />} />
       </Routes>
     </Router>
   );
